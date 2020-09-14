@@ -1,61 +1,64 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# Aivo test    
+    
+  THIS PROJECT WAS CREATED USING LARAVEL 7.x
+    
+## Folter Structure:   
+- `app/Repositories` (Repositories, by default for YoutubeAPI)    
+- `app/Services` (VideoSearchService)
+- `app/Http/Requests` (Request Validation)   
+- `routes/api.php` (API's endpoints)   
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
 
-## About Laravel
+## Important note about dependencies on controllers and services:    
+    
+The files `YoutubeController` , `VideoSearchServiceContract` and `VideoRepositoryContract` uses Laravel's Service Container to auto manage depencies, by default the repositories were created for `YoutubeApiRepository`, but it can be easily changed on the file `app/Providers/AppServiceProvider.php`    
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+ Example:    
+  
+    $this->app->bind('path/to/interface', 'path/to/concrete/class')
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Usage    
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### NOTE:
+ this project uses Google Client SDK to communicate with Youtube search API, so in order to use it you'll need a valid API KEY, it can be found here: https://console.developers.google.com/apis
 
-## Learning Laravel
+however, for testing purposes, a valid API KEY will be filled inside the .env.example file, more information below:
+ 
+    
+To start working on the project:    
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+     $ cp .env.local.dist .env.local
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Inside the .env file you'll find the placeholders for Youtube API, you can change the default values it as you like:
 
-## Laravel Sponsors
+    YOUTUBE_API_KEY="XXXXXXXXXXXXXX" (API KEY)
+    YOUTUBE_API_MAX_RESULTS=10 (number of results per search)
+    YOUTUBE_API_ORDER_BY=date (order results by)
+    YOUTUBE_API_RESOURCE_TYPE=video (type of the resource, could be channels, playlists...)
+   
+install dependencies with composer:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    $ composer install
 
-### Premium Partners
+  if  the application asks for a encription key:    
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+     $ php artisan key:generate  
 
-## Contributing
+  
+## Running the project with built-in PHP server
+    $ php artisan serve
+usually starts the project at `http://127.0.0.1:8000`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+then you can use the youtube endpoint:
 
-## Code of Conduct
+`http://127.0.0.1:8000/api/youtube?search=baby+shark`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Running tests    
+    
+To run the project tests    
+    
+     $ composer test   
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+To run specific tests you can use `--filter` option:    
+    
+    $ vendor/bin/phpunit --filter=ClassName::MethodName

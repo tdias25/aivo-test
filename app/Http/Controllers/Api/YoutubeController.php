@@ -1,23 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SearchRequest;
-use App\Repositories\YoutubeApiRepository;
-use Illuminate\Http\Request;
+use App\Services\Contracts\VideoSearchServiceContract;
 
 class YoutubeController extends Controller
 {
-    public function search(SearchRequest $request)
+    public function search(SearchRequest $request, VideoSearchServiceContract $VideoSearchService)
     {
         try {
-
-            $YoutubeAPI = new YoutubeApiRepository();
-
             return response()->json([
                 'sucess' => 'true',
-                'result' => $YoutubeAPI->findVideosByTerm($request->search)
+                'result' => $VideoSearchService->searchVideo($request->search)
             ]);
 
         } catch (\Throwable $th) {

@@ -2,9 +2,9 @@
 
 namespace App\Helpers\Transformers;
 
-class YoutubeApiResponseTransformer
+class YoutubeApiResponseTransformer implements VideoResponseTransformer
 {
-    public static function toArray(array $rawData): array
+    public function toArray($rawData): array
     {
         $collection = [];
 
@@ -17,7 +17,7 @@ class YoutubeApiResponseTransformer
                 'id' => $video->getId()->getVideoId(),
                 'title' => $snippetInfo->getTitle(),
                 'description' => $snippetInfo->getDescription(),
-                'thumbnail' => $snippetInfo->getThumbnails()[0],
+                'thumbnail' => $snippetInfo->getThumbnails()['high']['url'],
                 'extra' => [
                     'channel_id' => $snippetInfo->getChannelId(),
                     'channel_title' => $snippetInfo->getChannelTitle(),
